@@ -18,6 +18,29 @@ class PlantsController < ApplicationController
     render json: plant, status: :created
   end
 
+  def update
+    plant = Plant.find_by(id: params[:id])
+    if plant
+      plant.update(plant_params)
+      render json: plant, status: :accepted
+    else
+      render json: {error: "No Plant Found"}, status: :not_found
+    end
+  end
+  # Why did I have to use find_by instead of find in my controller for update?
+  # error: ActiveRecord::RecordNotFound (Couldn't find Plant with 'id'={:id=>"3"})
+  # Was it wrong syntax??...
+
+  def destroy
+      plant = Plant.find_by(id: params[:id])
+      if plant
+        plant.destroy
+        head :no_content
+      else
+        render json: {error: "No Plant Found"}, status: :not_found
+      end
+  end
+
   private
 
   def plant_params
